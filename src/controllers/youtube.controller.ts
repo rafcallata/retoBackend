@@ -1,6 +1,12 @@
-const puppeteer = require('puppeteer');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+// const puppeteer = require('puppeteer');
+// const util = require('util');
+// const exec = util.promisify(require('child_process').exec);
+import puppeteer from 'puppeteer';
+import util from 'util';
+import ex from 'child_process';
+const exec = util.promisify(ex.exec);
+import { VideoYoutube } from './interface';
+import { html } from 'cheerio/lib/api/manipulation';
 
 class VideosYoutube{
     async getVideos(){
@@ -25,15 +31,19 @@ class VideosYoutube{
             await page.click('#search-icon-legacy');
         
             await page.waitForTimeout(1000);
-            const enlaces = await page.evaluate(() => {
-                const elements = document.querySelectorAll('.ytd-video-renderer#video-title');
-                //console.log(elements);
+            const enlaces = await page.evaluate(async () => {      
+                const elements: any = document.querySelectorAll('.ytd-video-renderer#video-title');    
+                
+                console.log(elements);
                
-                const enlaces = [];
-                         
-                for (let element of elements) {
+                const enlaces = []; 
+                // for (let i = 0; i < elements.length; i += 1){
+                //     enlaces.push(elements[i])
+                //   }      
+                for (let element of elements) {    
                     enlaces.push(element.href);
                 }
+                // console.log(enlaces);
                 return enlaces;
             });
         

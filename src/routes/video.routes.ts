@@ -2,6 +2,7 @@ import { Response, } from 'restify';
 import { Router, } from 'restify-router';
 import videoController from '../controllers/video.controller';
 import fs from 'fs';
+import youtubeController from "../controllers/youtube.controller";
 
 const router = new Router();
 
@@ -51,6 +52,7 @@ router.get('/ffmpeg', async (req, res): Promise<Response> => {
 // });
 router.get('/cutvideo', async (req, res): Promise<Response> => {
     try {       
+        await youtubeController.getVideos();
         var files = fs.readdirSync("./srcVideos");
         let nameDir
         files.forEach(async file => {

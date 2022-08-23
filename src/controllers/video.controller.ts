@@ -1,6 +1,6 @@
 import VideoReelModel, { VideoStatusProcess } from "../datalayers/models/mongodb/VideoReel.models"
 import SonyvegasController from "./sonyvegas.controller"
-import youtuveController from "./youtuve.controller"
+
 
 class VideoController{
     async testingFfmpeg(){
@@ -56,8 +56,8 @@ class VideoController{
     }
     async cutVideo(nameVideo: string) {
         try {
-            await youtuveController.getVideos();
-            await SonyvegasController.cutVideo(nameVideo)
+            
+            //await SonyvegasController.cutVideo(nameVideo)
         } catch (error) {
             throw error
         }
