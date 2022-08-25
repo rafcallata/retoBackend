@@ -1,76 +1,46 @@
 import VideoReelModel, { VideoStatusProcess } from "../datalayers/models/mongodb/VideoReel.models"
+import sonyvegasController from "./sonyvegas.controller"
 import SonyvegasController from "./sonyvegas.controller"
 
 
-class VideoController{
-    async testingFfmpeg(){
-        try {
-            await SonyvegasController.ffmpeg({})
-        } catch (error) {
-            throw error
-        }
-    }
-    async executeProccessToBuildReel(){
-        const videoId: any = null
+class VideoController{    
+   async getVideosfromSource() {
         try {            
-            //al iniciar proceso
-            await this.setStatusOfVideos({
-                videoId: videoId,
-                status: VideoStatusProcess.INIT
-            })
-            //al finalizar proceso
-            await this.setStatusOfVideos({
-                videoId: videoId,
-                status: VideoStatusProcess.END
-            })
+            await SonyvegasController.getVideosfromSource()
         } catch (error) {
-            //al obtener error en el proceso
-            await this.setStatusOfVideos({
-                videoId: videoId,
-                status: VideoStatusProcess.ERR
-            })
+            throw error
+        }
+   }
+    async RenameVideos(){
+        try {            
+            await SonyvegasController.RenameVideos()
+        } catch (error) {
             throw error
         }
     }
-    async getStatusOfProcess(){
+    async cutVideo(){
+        try {            
+            const listOfVideos = await SonyvegasController.getFileVideo()
+            await sonyvegasController.cutVideo(listOfVideos)
+        } catch (error) {
+            throw error
+        }
+    }    
+    async createFileTxt() {
+        try {            
+            await SonyvegasController.CreateFileTxt()
+        } catch (error) {
+            throw error
+        }
+    }
+    async joinVideo() {
         try {
             
+            await SonyvegasController.JoinOrConcatVideos()
         } catch (error) {
             throw error
         }
     }
-    private async setStatusOfVideos({}: any){
 
-    }
-    private async createVideoReel(){
-
-    }
-    async testMongoDB(){
-        try {
-            const data = await VideoReelModel.findOne({}).lean()
-            console.log("~ file: Video.controller.ts ~ line 42 ~ VideoController ~ testMongoDB ~ data", data)
-            return data
-        } catch (error) {
-            throw error
-        }
-    }
-    async cutVideo(nameVideo: string) {
-        try {
-            
-            //await SonyvegasController.cutVideo(nameVideo)
-        } catch (error) {
-            throw error
-        }
-    }
-    async cutVideoPost(nameVideo: string, startTime: string, endTime: string, numberCpusAvailables: number) {
-        try {
-            await SonyvegasController.cutVideoPost(nameVideo, startTime, endTime, numberCpusAvailables)
-        } catch (error) {
-            throw error
-        }
-    }
-    async GetVideosYoutube(){
-        
-    }
 }
 export default new VideoController()
