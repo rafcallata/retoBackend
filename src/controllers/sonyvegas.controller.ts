@@ -198,7 +198,7 @@ class ImitandoSonyVegas{
             throw error
         }
     }
-    //esta funcion crea el archivo .txt donde se guardara la lista de los videos
+    //esta funcion crea el archivo listVideos.txt donde se guardara la lista de los videos
     async CreateFileTxt(){
         try {
             const opts = {shell: true}
@@ -223,7 +223,7 @@ class ImitandoSonyVegas{
             throw error
         }
     }
-    //filtra el archivo .txt donde se tiene todas las rutas de los videos
+    //filtra el archivo listVideos.txt donde se tiene todas las rutas de los videos
     async FileTxt(){
         const files = fs.readdirSync("./srcVideoOutPut");
             let archivoName: string
@@ -234,6 +234,31 @@ class ImitandoSonyVegas{
                 archivoName = file
             })
             return archivoName
+    }
+    //esta funcion sube el video a youtube con el Api de youtube y token de google OAuth
+    async publishOnVideoOnYoutube() {
+        let path = 'D:/RAFAEL/2022_I/BOOTCAMP/Web_Scraping_JS/'
+        let file = 'google.js'
+        const opts = {shell: true}
+        const child = spawn(`node ${path}${file}`, opts)
+        console.log(this.dirVideos)
+        child.stdout.on('data', (data: any) => {
+            console.log(`stdout: ${data}`);
+        });
+
+        child.stderr.on('data', (data: any) => {
+            console.error(`stderr: ${data}`);
+        });
+
+        child.on('close', (code: any) => {
+            console.log(`child process exited with code ${code}`);
+        });
+
+        child.on('message', (code: any) => {
+            console.log(`this is message from child.on =>`, code)
+        });
+        
+
     }
 
 }

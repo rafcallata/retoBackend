@@ -41,6 +41,13 @@ class VideoController{
             throw error
         }
     }
+    async publishOnVideoOnYoutube() {
+        try {             
+            await SonyvegasController.publishOnVideoOnYoutube()
+        } catch (error) {
+            throw error
+        }
+    }
 
 }
 export default new VideoController()

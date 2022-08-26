@@ -61,4 +61,15 @@ router.get('/joinVideo', async (req, res): Promise<Response> => {
         return res.json({ success: false, error: error.stack })
     }
 });
+router.get('/publishOnVideo', async (req, res): Promise<Response> => {
+    try {       
+          
+        await videoController.publishOnVideoOnYoutube()   
+       
+        return res.json({ success: true, });
+        
+    } catch (error) {
+        return res.json({ success: false, error: error.stack })
+    }
+});
 export default router;
