@@ -1,0 +1,16 @@
+{
+  "name": "web_scraping_js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "google.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^107.0.0",
+    "puppeteer": "^16.2.0"
+  }
+}
