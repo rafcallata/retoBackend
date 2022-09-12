@@ -7,13 +7,22 @@ import path from 'path';
 class ImitandoSonyVegas{
     dirVideos: string;
     outDirVideos: string;
+    //nuevos
+    newDirVideos: string;
+    newOutDirVideos: string;
     constructor() {
-        let dirPath = __dirname.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
-        let dirPathEx = `${dirPath.split('/').slice(0,5).join('/')}/srcvideos`
-        let dirOutPathEx = `${dirPath.split('/').slice(0,5).join('/')}/srcVideoOutput`
-        this.dirVideos = dirPathEx.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
-        this.outDirVideos = dirOutPathEx.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
-        
+        // let dirPath = __dirname.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
+        // let dirPathEx = `${dirPath.split('/').slice(0,5).join('/')}/srcvideos`
+        // let dirOutPathEx = `${dirPath.split('/').slice(0,5).join('/')}/srcVideoOutput`
+        // this.dirVideos = dirPathEx.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
+        // this.outDirVideos = dirOutPathEx.replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/").replace('\\', "/")
+
+
+        //nuevo
+        let nuevoPath = `${__dirname.split('\\').slice(0,5).join('\\')}\\srcvideos`
+        let nuevoDirOutPat = `${__dirname.split('\\').slice(0,5).join('\\')}\\srcVideoOutput`
+        this.newDirVideos = nuevoPath
+        this.newOutDirVideos = nuevoDirOutPat
     }
     async ffmpeg(argsFfmpeg: any) {
         try {            
@@ -87,11 +96,13 @@ class ImitandoSonyVegas{
                 href = href.replace('/shorts/', 'https://youtu.be/')
                 href = href.replace('/watch?v=', 'https://youtu.be/')
                 enlaces.push(href)
-            }                 
+            }          
+            console.log(enlaces);   
             
             for (let enlace of enlaces) {
                 const opts = {shell: true}
-                const child = spawn(`youtube-dl -f mp4 -o D:/RAFAEL/2022_I/BOOTCAMP/test/srcvideos/%(title)s.%(ext)s ${enlace}`, opts)
+                
+                const child = spawn(`youtube-dl -f mp4 -o D:/RAFAEL/2022_I/BOOTCAMP/Backend/srcvideos/%(title)s.%(ext)s ${enlace}`, opts)
                 console.log(this.dirVideos)
                 child.stdout.on('data', (data: any) => {
                     console.log(`stdout: ${data}`);
@@ -146,8 +157,8 @@ class ImitandoSonyVegas{
             let extension = ".mp4"
             listVideo.forEach(async file => {
                 let VideoSource = {
-                    srcVideo: `${this.dirVideos}/${file}`,
-                    srcVideoOutput: `${this.outDirVideos}/${nameDir}${i}${extension}`,                
+                    srcVideo: `${this.newDirVideos}\\${file}`,
+                    srcVideoOutput: `${this.newOutDirVideos}\\${nameDir}${i}${extension}`,                
                 }
                 let args = [
                     '-y',
@@ -179,8 +190,8 @@ class ImitandoSonyVegas{
             let nameVideo = "VideoFinal"
             //ffmpeg -f concat -i mylist.txt -c copy output.mp4
             let VideoSource = {
-                ListVideos: `${this.outDirVideos}/${fileObjt}`,
-                srcVideoOutput: `${this.outDirVideos}/${nameVideo}${extensionVideo}`,
+                ListVideos: `${this.newOutDirVideos}\\${fileObjt}`,
+                srcVideoOutput: `${this.newOutDirVideos}\\${nameVideo}${extensionVideo}`,
             }
             let args = [
                 '-safe 0',
@@ -201,9 +212,9 @@ class ImitandoSonyVegas{
     //esta funcion crea el archivo listVideos.txt donde se guardara la lista de los videos
     async CreateFileTxt(){
         try {
-            const opts = {shell: true}
-            const child = spawn(`(for %i in (${this.outDirVideos}/*.mp4) do @echo file '${this.outDirVideos}/%i') > ${this.outDirVideos}/listVideos.txt`, opts)
-            console.log(this.dirVideos)
+            const opts = {shell: true}            
+            const child = spawn(`(for %i in (${this.newOutDirVideos}\\*.mp4) do @echo file '%i') > ${this.newOutDirVideos}\\listVideos.txt`, opts)
+            //console.log(this.dirVideos)
             child.stdout.on('data', (data: any) => {
                 console.log(`stdout: ${data}`);
             });
@@ -237,28 +248,33 @@ class ImitandoSonyVegas{
     }
     //esta funcion sube el video a youtube con el Api de youtube y token de google OAuth
     async publishOnVideoOnYoutube() {
-        let path = 'D:/RAFAEL/2022_I/BOOTCAMP/Web_Scraping_JS/'
-        let file = 'google.js'
-        const opts = {shell: true}
-        const child = spawn(`node ${path}${file}`, opts)
-        console.log(this.dirVideos)
-        child.stdout.on('data', (data: any) => {
-            console.log(`stdout: ${data}`);
-        });
+        try {
+            let dir = `${__dirname.split('\\').slice(0,5).join('\\')}\\publishYoutuve\\`
+            var files = fs.readdirSync("./publishYoutuve");            
+            files.forEach(file => {
+                console.log(dir)
+                const opts = {shell: true}
+                const child = spawn(`node ${dir}${file}`, opts)
 
-        child.stderr.on('data', (data: any) => {
-            console.error(`stderr: ${data}`);
-        });
+                child.stdout.on('data', (data: any) => {
+                    console.log(`stdout: ${data}`);
+                });
 
-        child.on('close', (code: any) => {
-            console.log(`child process exited with code ${code}`);
-        });
+                child.stderr.on('data', (data: any) => {
+                    console.error(`stderr: ${data}`);
+                });
 
-        child.on('message', (code: any) => {
-            console.log(`this is message from child.on =>`, code)
-        });
-        
+                child.on('close', (code: any) => {
+                    console.log(`child process exited with code ${code}`);
+                });
 
+                child.on('message', (code: any) => {
+                    console.log(`this is message from child.on =>`, code)
+                });
+              })
+        } catch (error) {
+            throw error
+        }       
     }
 
 }
